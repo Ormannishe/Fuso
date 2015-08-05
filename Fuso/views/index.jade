@@ -1,5 +1,24 @@
 extends layout
 
 block content
-  input#start
-  input#end
+  h1#title Fuso - Predicting Traffic With An AI Agent
+  br
+  br
+  #container
+    p Start Location
+    input#start
+  #container
+    p End Location
+    input#end
+  #container
+    p Infer by:
+    form(action = "")
+      input#avg(type="radio", name="func", value="Average" checked="checked")
+      |  Average
+      input#dist(type="radio", name="func", value="Distance")
+      |  Distance
+      input#type(type="radio", name="func", value="StreetType")
+      |  Street Type
+      input#all(type="radio", name="func", value="All")
+      |  All of the Above
+    button#startButton(type='button' onclick='initializeMap()') Start !

@@ -20,3 +20,34 @@ function Intersection(name, streetList, location) {
   this.streetList = streetList;
   this.location = location;
 };
+
+/* Given an intersection, return all neighbor intersections */
+function getNeighbors(inter) {
+  var neighbors = [];
+  var edges = inter.streetList;
+  var i;
+
+  for (i = 0; i < edges.length; i++) {
+    if (edges[i].farEnd === inter) {
+      neighbors.push(edges[i].nearEnd)
+    }
+    else if (edges[i].nearEnd === inter) {
+      neighbors.push(edges[i].farEnd)
+    }
+    else {
+      console.log("Error.")
+    }
+  }
+
+  return neighbors;
+}
+
+/* Given two intersections, returns the distance between them. */
+function getDistance(inter1, inter2) {
+  var loc1 = inter1.location;
+  var loc2 = inter2.location;
+  var dist = Math.sqrt(Math.pow(loc2[0] - loc1[0], 2) +
+                       Math.pow(loc2[1] - loc1[1], 2));
+
+  return dist;
+}

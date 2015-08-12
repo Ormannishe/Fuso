@@ -5,3 +5,62 @@ body {
 a {
   color: #00b7ff;
 }
+
+li {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+#title {
+  text-align: center;
+}
+
+#textContainer {
+  display: inline-block;
+  width: 200px;
+}
+
+#radioContainer {
+
+}
+
+#inferHeading {
+  display: inline-block;
+  width: 455px;
+}
+
+#typeHeading {
+  display: inline-block;
+  width: 200px;
+}
+
+#starveHeading {
+  display: inline-block;
+  width: 300px;
+}
+
+#def {
+  margin-left: 50px;
+}
+
+#ten {
+  margin-left: 50px;
+}
+
+#outputArea {
+  float: left;
+}
+
+#outputArea2 {
+  float: left;
+  margin-left: 150px;
+}
+
+#outputArea3 {
+  float: left;
+  margin-left: 150px;
+}
+
+#startButton {
+  margin-top: 10px;
+}

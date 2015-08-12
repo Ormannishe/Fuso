@@ -47,3 +47,13 @@ function findStreet(inter1, inter2) {
   }
   console.log("Could not find street.");
 }
+
+function getStreetWithName(name, streets) {
+  for (var i = 0; i < streets.length; i++) {
+    if (streets[i].name === name) {
+      return streets[i];
+    }
+  }
+  console.log("Could not find street.");
+  return;
+}

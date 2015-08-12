@@ -4,14 +4,21 @@ block content
   h1#title Fuso - Predicting Traffic With An AI Agent
   br
   br
-  #container
+  #textContainer
     p Start Location
-    input#start
-  #container
+    input#start(value="Node 1")
+  #textContainer
     p End Location
-    input#end
-  #container
-    p Infer by:
+    input#end(value="Node 8")
+  #textContainer
+    p Number of Simulations
+    input#sims(value="200")
+  br
+  br
+  #radioContainer
+    p#inferHeading Infer by:
+    p#typeHeading Map Type:
+    p#starveHeading Starve Amount:
     form(action = "")
       input#avg(type="radio", name="func", value="Average" checked="checked")
       |  Average
@@ -19,6 +26,26 @@ block content
       |  Distance
       input#type(type="radio", name="func", value="StreetType")
       |  Street Type
-      input#all(type="radio", name="func", value="All")
-      |  All of the Above
+      input#mixed(type="radio", name="func", value="Mixed")
+      |  Mixed
+      input#similarity(type="radio", name="func", value="Similarity")
+      |  Similarity
+      input#def(type="radio", name="mapType", value="Default" checked="checked")
+      |  Default
+      input#test(type="radio", name="mapType", value="Test")
+      |  Test Map
+      input#ten(type="radio", name="starveAmount", value="10" checked="checked")
+      |  10%
+      input#twentyfive(type="radio", name="starveAmount", value="25")
+      |  25%
+      input#fifty(type="radio", name="starveAmount", value="50")
+      |  50%
+      input#seventyfive(type="radio", name="starveAmount", value="75")
+      |  75%
+      input#ninety(type="radio", name="starveAmount", value="90")
+      |  90%
     button#startButton(type='button' onclick='initializeMap()') Start !
+  br
+  #outputArea
+  #outputArea2
+  #outputArea3

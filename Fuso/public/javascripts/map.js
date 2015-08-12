@@ -31,7 +31,15 @@ function Map(streetList, interList) {
 /* Given a newly created map, removes the trafficLevel from x% of its edges,
 chosen at random, where x is specified by 'amount' */
 function dataStarve(map, amount) {
+  var numStreets = map.streets.length;
+  var numToStarve = Math.round(numStreets * amount);
 
+  for (var i = 0; i < numToStarve; i++) {
+    var streetToStarve = Math.floor(Math.random() * numStreets);
+
+    map.streets[streetToStarve].trafficLevel = 0;
+  }
+  return;
 };
 
 /* A helper function used by the Dijkstra function below. When given an index,
@@ -110,7 +118,9 @@ function Dijkstra(map, start, end, numVerticies) {
       for (j = 0; j < s.length; j++) {
         if ((j + 1) < s.length) {
           var currStreet = findStreet(s[j], s[j+1]);
-          currStreet.trafficLevel++;
+          if (currStreet.trafficLevel < 100) {
+            currStreet.trafficLevel++;
+          }
         }
       }
       return;
@@ -139,23 +149,110 @@ function Dijkstra(map, start, end, numVerticies) {
   console.log("Did not find shortest path.");
 }
 
+/* Step 1 of the process. Create a new map based on the trafficmap model and
+generates traffic on it. Outputs the original map for comparison later. */
 function initializeMap() {
-  var myMap = new trafficMap();
-  generateTraffic(myMap, 200);
-  var originalStreets = myMap.streets;
-  var starvedStreets;
-  var updatedStreets = infer(myMap);
+  var myMap;
+  var originalStreets;
+  var numSimulations = 0;
 
-  console.log("Actual Traffic Data")
-  console.log("-------------------")
-  for (var i = 0; i < updatedStreets.length; i++) {
-      console.log("Traffic Level for " + updatedStreets[i].name + ": " + updatedStreets[i].trafficLevel);
+  if (document.getElementById('def').checked) {
+    myMap = new trafficMap();
+  }
+  else if(document.getElementById('test').checked) {
+    myMap = new defaultMap();
+  }
+  else {
+    console.log("Error.");
   }
 
-  console.log("\nInferred Traffic Data")
-  console.log("-------------------")
+  numSimulations = parseInt(document.getElementById('sims').value);
+
+  if (!numSimulations) {
+    numSimulations = 0;
+  }
+
+  generateTraffic(myMap, numSimulations);
+  originalStreets = myMap.streets;
+  document.getElementById('outputArea').innerHTML = '<h3>Original Traffic Levels</h3>';
+
+  for (var i = 0; i < originalStreets.length; i++) {
+      // TODO Clear out #outputArea list
+      $("#outputArea").append('<li class="output">' +
+                              "Traffic Level for " +
+                              originalStreets[i].name +
+                              ": " +
+                              originalStreets[i].trafficLevel +
+                              "</li>");
+  }
+
+  starveMap(myMap);
+}
+
+/* Step 2 of the process. Given a map with generated traffic, starves the map
+of traffic information. Outputs the starved map for comparison later. */
+function starveMap(map) {
+  var starvedStreets;
+  var starveAmount;
+
+  if(document.getElementById('ten').checked) {
+    starveAmount = 0.1;
+  }
+  else if(document.getElementById('twentyfive').checked) {
+    starveAmount = 0.25;
+  }
+  else if(document.getElementById('fifty').checked) {
+    starveAmount = 0.5;
+  }
+  else if(document.getElementById('seventyfive').checked) {
+    starveAmount = 0.75;
+  }
+  else if(document.getElementById('ninety').checked) {
+    starveAmount = 0.9;
+  }
+  else {
+    console.log("Error.");
+  }
+
+  dataStarve(map, starveAmount);
+  starvedStreets = map.streets;
+  document.getElementById('outputArea2').innerHTML = '<h3>Starved Traffic Levels</h3>';
+
+  for (var i = 0; i < starvedStreets.length; i++) {
+    $("#outputArea2").append('<li class="output">' +
+                             "Traffic Level for " +
+                             starvedStreets[i].name +
+                             ": " +
+                             starvedStreets[i].trafficLevel +
+                             "</li>");
+  }
+
+  inferMap(map);
+}
+
+/* Step 3 of the process. Given a starved map, infers the missing data using AI
+techniques. Outputs the new inferred map for comparison to the original map. */
+function inferMap(map) {
+  var updatedMap;
+  var updatedStreets;
+  var bestRoute;
+  updatedMap = infer(map);
+  updatedStreets = updatedMap.streets;
+  document.getElementById('outputArea3').innerHTML = '<h3>Inferred Traffic Levels</h3>';
+
   for (var i = 0; i < updatedStreets.length; i++) {
-      console.log("Traffic Level for " + updatedStreets[i].name + ": " + updatedStreets[i].trafficLevel);
+
+    $("#outputArea3").append('<li class="output">' +
+                             "Traffic Level for " +
+                             updatedStreets[i].name +
+                             ": " +
+                             updatedStreets[i].trafficLevel +
+                             "</li>");
+  }
+
+  bestRoute = route(updatedMap);
+  for (var i = 0; i < bestRoute.length; i++) {
+    console.log(bestRoute[i].name);
   }
 }
 

@@ -51,3 +51,13 @@ function getDistance(inter1, inter2) {
 
   return dist;
 }
+
+function getInterWithName(name, inters) {
+  for (var i = 0; i < inters.length; i++) {
+    if (inters[i].name === name) {
+      return inters[i];
+    }
+  }
+  console.log("Could not find intersection.");
+  return;
+}

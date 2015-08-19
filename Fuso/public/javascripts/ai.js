@@ -325,7 +325,7 @@ function route(map) {
     while (unvisited.length > 0) {
       var closestIndex = minDist(dist, unvisited);
       var u = unvisited[closestIndex];
-      console.log(closestIndex);
+      //console.log(closestIndex);
       if (u === end) {
         var s = [];
 
@@ -333,7 +333,7 @@ function route(map) {
           s.push(u);
           u = prev[u.name];
         }
-        console.log(dist);
+        //console.log(dist);
         return s;
       }
 

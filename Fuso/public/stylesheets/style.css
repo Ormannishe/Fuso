@@ -53,12 +53,17 @@ li {
 
 #outputArea2 {
   float: left;
-  margin-left: 150px;
+  margin-left: 125px;
 }
 
 #outputArea3 {
   float: left;
-  margin-left: 150px;
+  margin-left: 125px;
+}
+
+#outputArea4 {
+  float: left;
+  margin-left: 125px;
 }
 
 #startButton {

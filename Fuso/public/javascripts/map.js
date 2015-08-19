@@ -7,12 +7,12 @@ function defaultMap() {
   var node3 = new partialIntersection("Node 3", [0, 1]);
   var node4 = new partialIntersection("Node 4", [1, 1]);
 
-  var edge1 = new Street("Edge 1", node1, node2, 27, "Main-road");
-  var edge2 = new Street("Edge 2", node2, node4, 86, "Main-road");
-  var edge3 = new Street("Edge 3", node3, node4, 0, "Main-road");
-  var edge4 = new Street("Edge 4", node1, node3, 40, "Main-road");
-  var edge5 = new Street("Edge 5", node1, node4, 0, "Main-road");
-  var edge6 = new Street("Edge 6", node3, node2, 15, "Main-road");
+  var edge1 = new Street("Edge 1", node1, node2, 1, "Main-road");
+  var edge2 = new Street("Edge 2", node2, node4, 1, "Main-road");
+  var edge3 = new Street("Edge 3", node3, node4, 1, "Main-road");
+  var edge4 = new Street("Edge 4", node1, node3, 1, "Main-road");
+  var edge5 = new Street("Edge 5", node1, node4, 1, "Main-road");
+  var edge6 = new Street("Edge 6", node3, node2, 1, "Main-road");
 
   node1.streetList.push(edge1, edge4, edge5);
   node2.streetList.push(edge1, edge2, edge6);
@@ -153,6 +153,7 @@ function Dijkstra(map, start, end, numVerticies) {
 generates traffic on it. Outputs the original map for comparison later. */
 function initializeMap() {
   var myMap;
+  var stats = new statsObject();
   var originalStreets;
   var numSimulations = 0;
 
@@ -184,14 +185,15 @@ function initializeMap() {
                               ": " +
                               originalStreets[i].trafficLevel +
                               "</li>");
+      stats.original.push(originalStreets[i].trafficLevel);
   }
 
-  starveMap(myMap);
+  starveMap(myMap, stats);
 }
 
 /* Step 2 of the process. Given a map with generated traffic, starves the map
 of traffic information. Outputs the starved map for comparison later. */
-function starveMap(map) {
+function starveMap(map, stats) {
   var starvedStreets;
   var starveAmount;
 
@@ -225,20 +227,23 @@ function starveMap(map) {
                              ": " +
                              starvedStreets[i].trafficLevel +
                              "</li>");
+    stats.starved.push(starvedStreets[i].trafficLevel);
   }
 
-  inferMap(map);
+  inferMap(map, stats);
 }
 
 /* Step 3 of the process. Given a starved map, infers the missing data using AI
 techniques. Outputs the new inferred map for comparison to the original map. */
-function inferMap(map) {
+function inferMap(map, stats) {
   var updatedMap;
   var updatedStreets;
   var bestRoute;
   updatedMap = infer(map);
   updatedStreets = updatedMap.streets;
+  bestRoute = route(updatedMap);
   document.getElementById('outputArea3').innerHTML = '<h3>Inferred Traffic Levels</h3>';
+  document.getElementById('outputArea4').innerHTML = '<h3>Best Path</h3>';
 
   for (var i = 0; i < updatedStreets.length; i++) {
 
@@ -248,12 +253,18 @@ function inferMap(map) {
                              ": " +
                              updatedStreets[i].trafficLevel +
                              "</li>");
+    stats.inferred.push(updatedStreets[i].trafficLevel);
   }
 
-  bestRoute = route(updatedMap);
-  for (var i = 0; i < bestRoute.length; i++) {
-    console.log(bestRoute[i].name);
+  for (var i = bestRoute.length - 1; i > -1; i--) {
+    $("#outputArea4").append('<li class="output">' +
+                             (bestRoute.length - i) + ". " +
+                             bestRoute[i].name +
+                             "</li>");
+    //console.log(bestRoute[i].name);
   }
+
+  getStats(stats);
 }
 
 $(document).ready(function() {
